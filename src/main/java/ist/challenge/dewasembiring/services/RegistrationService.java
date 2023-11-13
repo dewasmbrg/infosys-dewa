@@ -1,10 +1,12 @@
 package ist.challenge.dewasembiring.services;
 
 import ist.challenge.dewasembiring.dto.request.RegistrationRequest;
+import ist.challenge.dewasembiring.dto.response.BaseResponse;
 import ist.challenge.dewasembiring.enums.UserRole;
 import ist.challenge.dewasembiring.utils.UsernameValidator;
-import lombok.AllArgsConstructor;
 import ist.challenge.dewasembiring.models.User;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,18 +16,17 @@ public class RegistrationService {
     private final UserService userService;
     private final UsernameValidator usernameValidator;
 
-    public String register(RegistrationRequest request) {
-        boolean isValidEmail = usernameValidator.
-                test(request.getUsername());
+    public ResponseEntity<BaseResponse> register(RegistrationRequest request) {
+        boolean isValidUsername = usernameValidator.test(request.getUsername());
 
-        if (!isValidEmail) {
-            throw new IllegalStateException("username not valid");
+        if (!isValidUsername) {
+            throw new IllegalStateException("Username not valid");
         }
 
-        return userService.signUpUser((new User(
+        return userService.signUpUser(new User(
                 request.getUsername(),
                 request.getPassword(),
                 UserRole.USER
-        )));
+        ));
     }
 }
