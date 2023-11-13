@@ -1,16 +1,13 @@
 package ist.challenge.dewasembiring.services;
 
-        import ist.challenge.dewasembiring.repositories.UserRepository;
-        import lombok.AllArgsConstructor;
-        import org.springframework.security.core.userdetails.User;
-        import org.springframework.security.core.userdetails.UserDetails;
-        import org.springframework.security.core.userdetails.UserDetailsService;
-        import org.springframework.security.core.userdetails.UsernameNotFoundException;
-        import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-        import org.springframework.stereotype.Service;
-
-        import java.time.LocalDateTime;
-        import java.util.UUID;
+import ist.challenge.dewasembiring.repositories.UserRepository;
+import lombok.AllArgsConstructor;
+import ist.challenge.dewasembiring.models.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -37,9 +34,6 @@ public class UserService implements UserDetailsService {
                 .isPresent();
 
         if (userExists) {
-            // TODO check of attributes are the same and
-            // TODO if username not confirmed send confirmation username.
-
             throw new IllegalStateException("username already taken");
         }
 
@@ -47,23 +41,9 @@ public class UserService implements UserDetailsService {
                 .encode(user.getPassword());
 
         user.setPassword(encodedPassword);
+
         userRepository.save(user);
 
-//        String token = UUID.randomUUID().toString();
-//
-//        ConfirmationToken confirmationToken = new ConfirmationToken(
-//                token,
-//                LocalDateTime.now(),
-//                LocalDateTime.now().plusMinutes(15),
-//                user
-//        );
-//
-//        confirmationTokenService.saveConfirmationToken(
-//                confirmationToken);
-//
-////        TODO: SEND EMAIL
-//
-//        return token;
         return "works";
     }
 

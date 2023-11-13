@@ -1,20 +1,21 @@
 package ist.challenge.dewasembiring.models;
 
-        import ist.challenge.dewasembiring.enums.UserRole;
-        import lombok.*;
-        import org.springframework.security.core.GrantedAuthority;
-        import org.springframework.security.core.authority.SimpleGrantedAuthority;
-        import org.springframework.security.core.userdetails.UserDetails;
+import ist.challenge.dewasembiring.enums.UserRole;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-        import javax.persistence.*;
-        import java.util.Collection;
-        import java.util.Collections;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@Table(name="users")
 @Data
 public class User implements UserDetails {
 
