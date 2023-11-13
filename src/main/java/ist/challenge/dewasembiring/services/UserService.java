@@ -39,7 +39,15 @@ public class UserService implements UserDetailsService {
                 .isPresent();
 
         if (userExists) {
-            throw new IllegalStateException("username already taken");
+            BaseResponse response = new BaseResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.CONFLICT.value(),
+                    true,
+                    "Username already taken",
+                    "/api/v1/registration"
+            );
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());

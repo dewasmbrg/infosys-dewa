@@ -20,4 +20,8 @@ public class UserController {
         return registrationService.register(request);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<BaseResponse> loginUser(@RequestBody RegistrationRequest request) {
+        return registrationService.register(request);
+    }
 }
