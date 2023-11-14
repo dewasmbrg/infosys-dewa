@@ -1,10 +1,19 @@
 package ist.challenge.dewasembiring.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
-public class RegistrationRequest {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RegistrationRequest implements Serializable {
+    private static final long serialVersionUID = 6873144010250451838L;
 
-    private final String username;
-    private final String password;
+    private String username;
+    private String password;
 }

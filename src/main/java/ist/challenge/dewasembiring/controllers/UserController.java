@@ -3,6 +3,7 @@ package ist.challenge.dewasembiring.controllers;
         import io.swagger.annotations.ApiOperation;
         import ist.challenge.dewasembiring.dto.request.LoginRequest;
         import ist.challenge.dewasembiring.dto.request.RegistrationRequest;
+        import ist.challenge.dewasembiring.dto.request.UserUpdateRequest;
         import ist.challenge.dewasembiring.dto.response.BaseResponse;
         import ist.challenge.dewasembiring.models.User;
         import ist.challenge.dewasembiring.services.LoginService;
@@ -33,9 +34,22 @@ public class UserController {
         return loginService.login(request);
     }
 
+    @ApiOperation("User Lihat All")
+    @GetMapping("/lihat/all")
+    public ResponseEntity<BaseResponse> lihatUserAll() {
+        return userService.lihatUserAll();
+    }
+
+    @ApiOperation("User Lihat Single")
+    @PostMapping("/lihat/single")
+    public ResponseEntity<BaseResponse> lihatUserSingle(@RequestBody LoginRequest request) {
+        return userService.lihatUserSingle(request);
+    }
+
+
     @ApiOperation("User Edit")
     @PutMapping("/edit/{username}")
-    public ResponseEntity<BaseResponse> editUser(@RequestBody LoginRequest request, User user) {
-        return userService.editUser(request, user);
+    public ResponseEntity<BaseResponse> editUser(@PathVariable String username, @RequestBody UserUpdateRequest request) {
+        return userService.editUser(username, request);
     }
 }
