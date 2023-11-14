@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -39,5 +41,6 @@ public class RegistrationService {
                 request.getPassword(),
                 UserRole.USER
         ));
+
     }
 }

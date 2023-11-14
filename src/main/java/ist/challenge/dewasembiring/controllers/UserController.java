@@ -5,6 +5,7 @@ package ist.challenge.dewasembiring.controllers;
         import ist.challenge.dewasembiring.dto.request.RegistrationRequest;
         import ist.challenge.dewasembiring.dto.request.UserUpdateRequest;
         import ist.challenge.dewasembiring.dto.response.BaseResponse;
+        import ist.challenge.dewasembiring.dto.response.BaseResponseData;
         import ist.challenge.dewasembiring.models.User;
         import ist.challenge.dewasembiring.services.LoginService;
         import ist.challenge.dewasembiring.services.RegistrationService;
@@ -12,6 +13,8 @@ package ist.challenge.dewasembiring.controllers;
         import lombok.AllArgsConstructor;
         import org.springframework.http.ResponseEntity;
         import org.springframework.web.bind.annotation.*;
+
+        import java.util.List;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -36,16 +39,15 @@ public class UserController {
 
     @ApiOperation("User Lihat All")
     @GetMapping("/lihat/all")
-    public ResponseEntity<BaseResponse> lihatUserAll() {
+    public ResponseEntity<BaseResponseData<List<User>>> lihatUserAll() {
         return userService.lihatUserAll();
     }
 
     @ApiOperation("User Lihat Single")
     @PostMapping("/lihat/single")
-    public ResponseEntity<BaseResponse> lihatUserSingle(@RequestBody LoginRequest request) {
+    public ResponseEntity<BaseResponseData<User>> lihatUserSingle(@RequestBody LoginRequest request) {
         return userService.lihatUserSingle(request);
     }
-
 
     @ApiOperation("User Edit")
     @PutMapping("/edit/{username}")

@@ -43,8 +43,6 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
-    // Setter methods for injection
-
     public void setSecret(String secret) {
         this.secret = secret;
     }

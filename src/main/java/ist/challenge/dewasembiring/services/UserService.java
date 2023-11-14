@@ -1,8 +1,10 @@
 package ist.challenge.dewasembiring.services;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import ist.challenge.dewasembiring.dto.request.LoginRequest;
 import ist.challenge.dewasembiring.dto.request.UserUpdateRequest;
 import ist.challenge.dewasembiring.dto.response.BaseResponse;
+import ist.challenge.dewasembiring.dto.response.BaseResponseData;
 import ist.challenge.dewasembiring.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import ist.challenge.dewasembiring.models.User;
@@ -106,82 +108,89 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<BaseResponse> lihatUserAll() {
+    public ResponseEntity<BaseResponseData<List<User>>> lihatUserAll() {
         try {
             List<User> userList = userRepository.findAll();
 
             if (!userList.isEmpty()) {
-                BaseResponse response = new BaseResponse(
+                BaseResponseData<List<User>> response = new BaseResponseData<>(
                         LocalDateTime.now(),
                         HttpStatus.OK.value(),
                         false,
                         "Success",
-                        "/lihat/all"
+                        "/lihat/all",
+                        userList
                 );
 
                 return ResponseEntity.ok(response);
             } else {
-
-                BaseResponse response = new BaseResponse(
+                BaseResponseData<List<User>> response = new BaseResponseData<>(
                         LocalDateTime.now(),
                         HttpStatus.NOT_FOUND.value(),
                         true,
                         "User tidak ditemukan",
-                        "/lihat/all"
+                        "/lihat/all",
+                        null
                 );
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } catch (Exception e) {
-
-            BaseResponse response = new BaseResponse(
+            BaseResponseData<List<User>> response = new BaseResponseData<>(
                     LocalDateTime.now(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     true,
                     "Error",
-                    "/lihat/all"
+                    "/lihat/all",
+                    null
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
-    public ResponseEntity<BaseResponse> lihatUserSingle(LoginRequest request) {
+
+
+    public ResponseEntity<BaseResponseData<User>> lihatUserSingle(@RequestBody LoginRequest request) {
         try {
             Optional<User> userOptional = userRepository.findByUsername(request.getUsername());
 
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
 
-                BaseResponse response = new BaseResponse(
+                BaseResponseData<User> response = new BaseResponseData<>(
                         LocalDateTime.now(),
                         HttpStatus.OK.value(),
                         false,
                         "Success",
-                        "/lihat/single/" + request.getUsername()
+                        "/lihat/single/" + request.getUsername(),
+                        user
                 );
 
                 return ResponseEntity.ok(response);
             } else {
-                // User not found
-                BaseResponse response = new BaseResponse(
+
+                BaseResponseData<User> response = new BaseResponseData<>(
                         LocalDateTime.now(),
                         HttpStatus.NOT_FOUND.value(),
                         true,
                         "User tidak ditemukan",
-                        "/lihat/single/" + request.getUsername()
+                        "/lihat/single/" + request.getUsername(),
+                        null
                 );
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } catch (Exception e) {
-            // Handle exceptions
-            BaseResponse response = new BaseResponse(
+
+            BaseResponseData<User> response = new BaseResponseData<>(
                     LocalDateTime.now(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     true,
                     "Error",
-                    "/lihat/single/" + request.getUsername()
+                    "/lihat/single/" + request.getUsername(),
+                    null
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
 }

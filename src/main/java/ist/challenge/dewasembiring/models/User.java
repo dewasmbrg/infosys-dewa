@@ -1,5 +1,6 @@
 package ist.challenge.dewasembiring.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ist.challenge.dewasembiring.enums.UserRole;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -17,6 +21,7 @@ import java.util.Collections;
 @Entity
 @Table(name="users")
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements UserDetails {
 
 
@@ -33,8 +38,9 @@ public class User implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    @ElementCollection(targetClass = UserRole.class)
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private Set<UserRole> userRole = new HashSet<>();
     private Boolean locked = false;
     private Boolean enabled = false;
 
@@ -43,14 +49,15 @@ public class User implements UserDetails {
                 UserRole userRole) {
         this.username = username;
         this.password = password;
-        this.userRole = userRole;
+//        this.userRole = userRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority(userRole.name());
-        return Collections.singletonList(authority);
+
+        return userRole.stream()
+                .map(userRole -> new SimpleGrantedAuthority(userRole.name()))
+                .collect(Collectors.toList());
     }
 
     @Override

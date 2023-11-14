@@ -42,7 +42,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        // Provide relevant information for Swagger documentation
+
         return new ApiInfoBuilder()
                 .title("Infosys - Dewa Challenge API Documentation")
                 .description("Contains all of api doc for challenge test.")
