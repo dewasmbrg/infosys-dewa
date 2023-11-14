@@ -42,20 +42,6 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
     }
 
-//    @Bean
-//    public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistration() {
-//        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>(jwtAuthenticationFilter);
-//        registrationBean.setOrder(1);
-//        return registrationBean;
-//    }
-//
-//    @Bean
-//    public FilterRegistrationBean<JwtAuthorizationFilter> jwtAuthorizationFilterRegistration() {
-//        FilterRegistrationBean<JwtAuthorizationFilter> registrationBean = new FilterRegistrationBean<>(jwtAuthorizationFilter);
-//        registrationBean.setOrder(2);
-//        return registrationBean;
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
