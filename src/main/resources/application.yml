@@ -16,7 +16,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
-
-
-main:
-  allow-circular-references=true:
+  main:
+    allow-circular-references: true
+  logging:
+    level:
+      org:
+        springframework=DEBUG:

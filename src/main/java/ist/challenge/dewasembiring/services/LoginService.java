@@ -29,13 +29,13 @@ public class LoginService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtil.generateToken(authentication);
+        String jwt = jwtUtil.generateToken(String.valueOf(authentication));
 
         return ResponseEntity.ok(new BaseResponse(
                 LocalDateTime.now(),
                 HttpStatus.OK.value(),
                 false,
-                "Sukses Login.",
+                "Sukses Login. " + jwt,
                 "/user/login"
         ));
     }

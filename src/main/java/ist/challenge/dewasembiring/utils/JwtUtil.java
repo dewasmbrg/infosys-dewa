@@ -3,7 +3,6 @@ package ist.challenge.dewasembiring.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -11,12 +10,17 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String secret = "infosys-dewa202i3@@2@";
-    private final int expirationTime = 360000; // milliseconds
+    private String secret;
+    private int expirationTime;
 
-    public String generateToken(Authentication authentication) {
-        String username = authentication.getName();
+    // Default constructor
+    public JwtUtil() {
+        // Set default values or load from configuration
+        this.secret = "infosys-dewa202i3@@2@";
+        this.expirationTime = 360000; // milliseconds
+    }
 
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
@@ -37,5 +41,15 @@ public class JwtUtil {
     public String extractUsername(String token) {
         Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
         return claims.getSubject();
+    }
+
+    // Setter methods for injection
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public void setExpirationTime(int expirationTime) {
+        this.expirationTime = expirationTime;
     }
 }

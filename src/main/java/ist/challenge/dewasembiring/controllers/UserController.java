@@ -33,7 +33,7 @@ public class UserController {
         return loginService.login(request);
     }
 
-    @ApiOperation("User Update")
+    @ApiOperation("User Edit")
     @PutMapping("/edit/{username}")
     public ResponseEntity<BaseResponse> editUser(@RequestBody LoginRequest request, User user) {
         return userService.editUser(request, user);

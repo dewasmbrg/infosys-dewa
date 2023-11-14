@@ -2,8 +2,7 @@ package ist.challenge.dewasembiring.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ist.challenge.dewasembiring.dto.request.LoginRequest;
-import lombok.Data;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,12 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@Component
+//@Component
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
+    private AuthenticationManager authenticationManager;
+    private JwtUtil jwtUtil;
 
+
+    @Autowired
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
@@ -49,7 +50,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) {
-        String token = jwtUtil.generateToken(authResult);
+        String token = jwtUtil.generateToken(String.valueOf(authResult));
         response.addHeader("Authorization", "Bearer " + token);
+    }
+
+    // Setter methods for injection
+
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
+    public void setJwtUtil(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 }

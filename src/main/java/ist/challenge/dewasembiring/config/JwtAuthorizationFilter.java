@@ -1,12 +1,10 @@
 package ist.challenge.dewasembiring.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ist.challenge.dewasembiring.dto.response.BaseResponse;
 import ist.challenge.dewasembiring.exceptions.ExpiredJwtException;
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -57,7 +55,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 } catch (ExpiredJwtException e) {
-
                     BaseResponse errorResponse = new BaseResponse(
                             LocalDateTime.now(),
                             HttpStatus.UNAUTHORIZED.value(),
@@ -66,13 +63,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                             "/user/login"
                     );
 
-                    ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(errorResponse);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
+                    return;
                 }
-
             }
         }
 
         filterChain.doFilter(request, response);
     }
-
 }

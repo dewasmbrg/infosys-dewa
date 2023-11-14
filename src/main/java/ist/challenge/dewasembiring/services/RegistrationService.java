@@ -28,7 +28,7 @@ public class RegistrationService {
                     HttpStatus.NOT_ACCEPTABLE.value(),
                     true,
                     "Username tidak valid.",
-                    "/api/v1/registration"
+                    "/user/registration"
             );
 
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);

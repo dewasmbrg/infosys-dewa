@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
                     HttpStatus.CONFLICT.value(),
                     true,
                     "Username sudah terpakai.",
-                    "/api/v1/registration"
+                    "/user/registration"
             );
 
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
                 HttpStatus.CREATED.value(),
                 false,
                 "Akun berhasil dibuat.",
-                "/api/v1/registration"
+                "/user/registration"
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
