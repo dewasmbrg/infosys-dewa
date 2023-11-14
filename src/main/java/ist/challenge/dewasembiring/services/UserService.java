@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
                     LocalDateTime.now(),
                     HttpStatus.CONFLICT.value(),
                     true,
-                    "Username already taken",
+                    "Username sudah terpakai.",
                     "/api/v1/registration"
             );
 
@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
                 LocalDateTime.now(),
                 HttpStatus.CREATED.value(),
                 false,
-                "User created successfully",
+                "Akun berhasil dibuat.",
                 "/api/v1/registration"
         );
 
