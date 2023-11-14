@@ -88,7 +88,6 @@ public class UserService implements UserDetailsService {
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
-            // User not found
             BaseResponse response = new BaseResponse(
                     LocalDateTime.now(),
                     HttpStatus.NOT_FOUND.value(),

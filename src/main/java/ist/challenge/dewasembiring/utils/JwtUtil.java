@@ -11,8 +11,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String secret = "your-secret-key"; // replace with your actual secret key
-    private final int expirationTime = 360000; // 24 hours in milliseconds
+    private final String secret = "infosys-dewa202i3@@2@";
+    private final int expirationTime = 360000; // milliseconds
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
