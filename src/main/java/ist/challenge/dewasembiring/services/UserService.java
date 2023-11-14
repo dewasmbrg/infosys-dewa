@@ -1,5 +1,6 @@
 package ist.challenge.dewasembiring.services;
 
+import ist.challenge.dewasembiring.dto.request.LoginRequest;
 import ist.challenge.dewasembiring.dto.response.BaseResponse;
 import ist.challenge.dewasembiring.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -65,6 +67,43 @@ public class UserService implements UserDetailsService {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    public ResponseEntity<BaseResponse> editUser(LoginRequest request, User updatedUser) {
+        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
+
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
+
+            // Update user details
+            existingUser.setUsername(updatedUser.getUsername());
+
+            // Save the updated user
+            userRepository.save(existingUser);
+
+            BaseResponse response = new BaseResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.OK.value(),
+                    false,
+                    "Username berhasil diubah.",
+                    "/user/edit/" + request.getUsername()
+            );
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            // User not found
+            BaseResponse response = new BaseResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    true,
+                    "Username tidak ditemukan.",
+                    "/user/edit/" + request.getUsername()
+            );
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+
     public int enableUser(String username) {
         return userRepository.enableUser(username);
     }

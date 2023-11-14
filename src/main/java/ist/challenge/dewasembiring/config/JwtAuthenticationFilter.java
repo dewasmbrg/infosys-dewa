@@ -28,7 +28,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setFilterProcessesUrl("/user/login");
     }
 
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
