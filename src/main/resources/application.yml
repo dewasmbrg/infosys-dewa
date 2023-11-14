@@ -22,3 +22,5 @@ spring:
     level:
       org:
         springframework=DEBUG:
+
+swagger.enabled: true
