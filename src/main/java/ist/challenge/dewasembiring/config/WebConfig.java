@@ -2,7 +2,8 @@ package ist.challenge.dewasembiring.config;
 
 import ist.challenge.dewasembiring.exceptions.CustomAuthenticationEntryPoint;
 import ist.challenge.dewasembiring.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Data;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,24 +17,44 @@ import ist.challenge.dewasembiring.utils.JwtUtil;
 
 @Configuration
 @EnableWebSecurity
+@Data
 public class WebConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtUtil jwtUtil;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
-    @Autowired
     public WebConfig(
             UserService userService,
             BCryptPasswordEncoder bCryptPasswordEncoder,
             CustomAuthenticationEntryPoint authenticationEntryPoint,
-            JwtUtil jwtUtil) {
+            JwtUtil jwtUtil,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            JwtAuthorizationFilter jwtAuthorizationFilter) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.jwtUtil = jwtUtil;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
     }
+
+//    @Bean
+//    public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistration() {
+//        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>(jwtAuthenticationFilter);
+//        registrationBean.setOrder(1);
+//        return registrationBean;
+//    }
+//
+//    @Bean
+//    public FilterRegistrationBean<JwtAuthorizationFilter> jwtAuthorizationFilterRegistration() {
+//        FilterRegistrationBean<JwtAuthorizationFilter> registrationBean = new FilterRegistrationBean<>(jwtAuthorizationFilter);
+//        registrationBean.setOrder(2);
+//        return registrationBean;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

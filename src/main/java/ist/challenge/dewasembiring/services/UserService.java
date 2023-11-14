@@ -74,10 +74,8 @@ public class UserService implements UserDetailsService {
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
 
-            // Update user details
             existingUser.setUsername(updatedUser.getUsername());
 
-            // Save the updated user
             userRepository.save(existingUser);
 
             BaseResponse response = new BaseResponse(

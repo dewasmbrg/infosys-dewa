@@ -1,6 +1,12 @@
 package ist.challenge.dewasembiring.config;
 
+import ist.challenge.dewasembiring.dto.response.BaseResponse;
 import ist.challenge.dewasembiring.exceptions.ExpiredJwtException;
+import lombok.Data;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +21,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import ist.challenge.dewasembiring.services.UserService;
 import ist.challenge.dewasembiring.utils.JwtUtil;
-
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -51,11 +57,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 } catch (ExpiredJwtException e) {
-                    // Handle expired token here
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().write("Token has expired");
-                    return;
+
+                    BaseResponse errorResponse = new BaseResponse(
+                            LocalDateTime.now(),
+                            HttpStatus.UNAUTHORIZED.value(),
+                            true,
+                            "Token sudah kadaluarsa.",
+                            "/user/login"
+                    );
+
+                    ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(errorResponse);
                 }
+
             }
         }
 
