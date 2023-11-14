@@ -2,7 +2,7 @@ package ist.challenge.dewasembiring.config;
 
 import ist.challenge.dewasembiring.exceptions.CustomAuthenticationEntryPoint;
 import ist.challenge.dewasembiring.services.UserService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,14 +15,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ist.challenge.dewasembiring.utils.JwtUtil;
 
 @Configuration
-@AllArgsConstructor
 @EnableWebSecurity
 public class WebConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-    private final JwtUtil jwtUtil; // Inject JwtUtil here
+    private final JwtUtil jwtUtil;
+
+    @Autowired
+    public WebConfig(
+            UserService userService,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            CustomAuthenticationEntryPoint authenticationEntryPoint,
+            JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,13 +44,14 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint).and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil)) // Pass jwtUtil here
-                .addFilter(new JwtAuthorizationFilter(jwtUtil, userService)); // Pass jwtUtil and userService here
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
+                .addFilter(new JwtAuthorizationFilter(jwtUtil, userService));
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
@@ -51,10 +63,9 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
+    @Bean
     @Override
-    @Bean // Expose AuthenticationManager as a bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 }
